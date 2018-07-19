@@ -5,7 +5,7 @@ var fs = require('fs');
 const header = "<html>"
 				+"<head>"
 				 +"<meta charset=\"uft-8\">"
-				 +"<link rel=\"stylesheet\" href=\"style.css\">"
+				 +"<link rel=\"stylesheet\" href=\"/style.css\">"
 				 +"<title>Pliki - %filepath%</title>"
 				+"</head>"
 				+"<body>";
@@ -41,16 +41,30 @@ function generateWebpage(req, res){
 	res.setHeader('Content-Type', 'text/html; charset=utf-8');
 	res.setHeader('Content-Language', 'pl-PL');
 
-	res.write(header.replace("%filepath%", "/"));
-	res.write('<h1>Przeglądarka plików!</h1>');
-	getFiles(res);
+	try{
+		getFiles(res, decodeURI(req.url));
+	} catch(err){
+		//TODO Error page
+	}
 }
 
-function getFiles(res){
-	fs.readdir(dir, (err, files) =>{
-		for(let i in files){
-			res.write("<a>"+files[i]+"</a>");
-		}
-		res.end(footer);
-	});
+function getFiles(res,url){
+	let dirr = dir + url;
+	let parent =url.split('/').slice(0, -1).join('/');
+	if(fs.lstatSync(dirr).isDirectory()){
+		fs.readdir(dir+url, (err, files) =>{
+			res.write(header.replace("%filepath%", url));
+			res.write('<h1>Przeglądarka plików!</h1>');
+			if(url!="/") res.write("<a href=\""+(parent==""?"/":parent)+"\">..</a>")
+			for(let i in files){
+				res.write("<a href=\""+url+(url.length>1?"/":"")+files[i]+"\">"+files[i]+"</a>");
+			}
+			res.end(footer);
+		});
+	} else{
+		res.setHeader('Content-Type', 'text/plain; charset=utf-8');
+		fs.readFile(dirr, (err, data)=>{
+			res.end(data);
+		});
+	}
 }
