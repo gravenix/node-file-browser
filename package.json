@@ -1,0 +1,14 @@
+{
+  "name": "node-file-browser",
+  "version": "1.0.0",
+  "description": "A HTTP File browser using node.js",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "btalarczyk1@gmail.com",
+  "license": "ISC",
+  "dependencies": {
+    "http": "0.0.0"
+  }
+}
