@@ -1,7 +1,29 @@
-h1{
-	background-color: black;
-	color: white;
+body{
+	margin: 5px;
 }
-a{
+h1{
+	background: linear-gradient(to bottom, #363672, #33e8ff);
+	color: white;
+	text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
+	text-align: center;
+	border-left: 1px solid black;
+	border-top: 1px solid black;
+	border-right: 1px solid black;
+	border-top-left-radius: 20px;
+	border-top-right-radius: 20px;
+	margin-bottom: 0px;
+}
+div{
+	border: 1px solid black;
+	border-top: 0px;
+	padding: 10px;
+}
+div a{
 	display: block;
+	margin-bottom: 2px;
+	font-size: 120%;
+}
+
+div a:last-of-type{
+	margin-bottom: 0px;
 }
