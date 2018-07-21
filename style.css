@@ -20,10 +20,14 @@ div{
 }
 div a{
 	display: block;
+	position: relative;
 	margin-bottom: 2px;
 	font-size: 120%;
+	height: 22px;
 }
-
 div a:last-of-type{
 	margin-bottom: 0px;
+}
+div a img{
+	height: 100%;
 }

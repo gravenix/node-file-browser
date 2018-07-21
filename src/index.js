@@ -42,9 +42,18 @@ function generateWebpage(req, res){
 			res.end();
 		});
 		return;
+	} else if(req.url.startsWith("/icon/")){
+		fs.readFile('.'+req.url, (err, data) => {
+			if(err) return;
+			res.setHeader('Content-Type', 'image/*;');
+			res.write(data);
+			res.end();
+		});
+		return;
 	}
+
 	res.setHeader('Content-Type', 'text/html; charset=utf-8');
-	res.setHeader('Content-Language', 'pl-PL');
+	//res.setHeader('Content-Language', 'pl-PL');
 
 	try{
 		getFiles(res, decodeURI(req.url));
@@ -55,19 +64,21 @@ function generateWebpage(req, res){
 }
 
 function getFiles(res,url){
-	let dirr = dir + url;
-	let parent = url.split('/').slice(0, -1).join('/');
-	if(fs.lstatSync(dirr).isDirectory()){
-		fs.readdir(dir+url, (err, files) =>{
+	let path = dir + url;
+
+	if(!path.endsWith("/")) path += "/";
+
+	if(fs.lstatSync(path).isDirectory()){
+		fs.readdir(path, (err, files) =>{
 			res.write(header.replace("%filepath%", url));
 			res.write('<h1>Przeglądarka plików - '+url+'</h1>');
 			res.write('<div>');
-			res.write(getFilesHTML(files, parent, url));
+			res.write(getFilesHTML(files, path, url));
 			res.write('</div>');
 			res.end(footer);
 		});
 	} else{
-		getFile(res, dirr);
+		getFile(res, path);
 	}
 }
 
@@ -79,12 +90,38 @@ function getFile(res, file){
 	});
 }
 
-function getFilesHTML(files, parent, url){
-	let r="";
+function getFilesHTML(files, path, url){
+	let d="";
+	let f="";
+	let parent = url.split('/').slice(0, -1).join('/');
+	let tmp;
+
 	if(url!="/") 
-		r+= "<a href=\""+(parent==""?"/":parent)+"\">..</a>";
+		d += "<a href=\""+(parent==""?"/":parent)+"\">..</a>";
 	for(let i in files){
-		r += "<a href=\""+url+(url.length>1?"/":"")+files[i]+"\">"+files[i]+"</a>";
+		tmp = getALinkTo(files[i], path, url);
+		if(tmp.type === 'directory')
+			d += tmp.html;
+		else 
+			f += tmp.html;
 	}
-	return r;
+	return d+f;
+}
+
+function getALinkTo(filename, path, url){
+	let html = '<a href="'+url+(url.length>1?"/":"")+filename+'">';
+	let type;
+
+	if(fs.lstatSync(path+filename).isDirectory()){
+		html += '<img src="/icon/folder.png" />';
+		type = 'directory';
+	} else{
+		html += '<img src="/icon/file.png" />';
+		type = 'file';
+	}
+	html += '<span>'+filename+'</span>'+'</a>';
+	return {
+		type: type,
+		html: html
+	};
 }
