@@ -31,3 +31,11 @@ div a:last-of-type{
 div a img{
 	height: 100%;
 }
+a span.size{
+	float: right;
+	text-decoration:  none;
+	color: black;
+}
+a:hover{
+	background-color: #eee;
+}

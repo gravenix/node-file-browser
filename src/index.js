@@ -111,17 +111,31 @@ function getFilesHTML(files, path, url){
 function getALinkTo(filename, path, url){
 	let html = '<a href="'+url+(url.length>1?"/":"")+filename+'">';
 	let type;
+	let stat = fs.lstatSync(path+filename);
 
-	if(fs.lstatSync(path+filename).isDirectory()){
+	if(stat.isDirectory()){
 		html += '<img src="/icon/folder.png" />';
 		type = 'directory';
 	} else{
 		html += '<img src="/icon/file.png" />';
 		type = 'file';
 	}
-	html += '<span>'+filename+'</span>'+'</a>';
+	html += '<span>'+filename+'</span>';
+	if(type==='file') html += '<span class="size">'+convertSize(stat.size)+'</span>';
+	html += '</a>';
 	return {
 		type: type,
 		html: html
 	};
+}
+
+function convertSize(size){
+	const unit = ['B', 'KB', 'MB', 'GB', 'TB'];
+	let u_id=0;
+
+	while(size>1024) {
+		size=Math.round(size/1024);
+		u_id++;
+	}
+	return size+" "+unit[u_id];
 }
