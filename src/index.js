@@ -71,7 +71,7 @@ function getFiles(res,url){
 	if(fs.lstatSync(path).isDirectory()){
 		fs.readdir(path, (err, files) =>{
 			res.write(header.replace("%filepath%", url));
-			res.write('<h1>Przeglądarka plików - '+url+'</h1>');
+			res.write('<h1>File Browser - '+url+'</h1>');
 			res.write('<div>');
 			res.write(getFilesHTML(files, path, url));
 			res.write('</div>');
@@ -121,7 +121,10 @@ function getALinkTo(filename, path, url){
 		type = 'file';
 	}
 	html += '<span>'+filename+'</span>';
-	if(type==='file') html += '<span class="size">'+convertSize(stat.size)+'</span>';
+	if(type==='file') {
+		html += '<span class="size">'+convertSize(stat.size)+'</span>';
+		html += '<span class="date">'+stat.mtime.toDateString()+'</span>';
+	}
 	html += '</a>';
 	return {
 		type: type,

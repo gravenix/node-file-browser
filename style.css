@@ -31,7 +31,18 @@ div a:last-of-type{
 div a img{
 	height: 100%;
 }
+a span{
+	display: inline-block;
+	min-width: 10%;
+}
 a span.size{
+	text-align: right;
+	float: right;
+	text-decoration:  none;
+	color: black;
+}
+a span.date{
+	text-align: right;
 	float: right;
 	text-decoration:  none;
 	color: black;
