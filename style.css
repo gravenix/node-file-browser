@@ -47,6 +47,10 @@ a span.date{
 	text-decoration:  none;
 	color: black;
 }
+h2.notice{
+ 	width: fit-content;
+    margin: 1px 5px;
+}
 a:hover{
 	background-color: #eee;
 }

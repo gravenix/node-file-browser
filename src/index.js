@@ -97,13 +97,16 @@ function getFilesHTML(files, path, url){
 	let tmp;
 
 	if(url!="/") 
-		d += "<a href=\""+(parent==""?"/":parent)+"\">..</a>";
+		d += "<a href=\""+(parent==""?"/":parent)+"\">.. Back</a>";
 	for(let i in files){
 		tmp = getALinkTo(files[i], path, url);
 		if(tmp.type === 'directory')
 			d += tmp.html;
 		else 
 			f += tmp.html;
+	}
+	if(files.length===0){
+		d += '<h2 class="notice">This directory is empty</h2>'
 	}
 	return d+f;
 }
