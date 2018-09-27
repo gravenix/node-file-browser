@@ -1,0 +1,1 @@
+node %cd%\src\index.js
